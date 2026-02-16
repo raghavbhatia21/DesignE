@@ -13,8 +13,8 @@ function signInWithGoogle() {
     const provider = new firebase.auth.GoogleAuthProvider();
     auth.signInWithPopup(provider)
         .catch(error => {
-            console.error("Auth Error:", error);
-            authError.innerText = "Login failed: " + error.message;
+            console.error("Auth Error Object:", error);
+            authError.innerText = `Login failed (${error.code}): ${error.message}`;
             authError.style.display = 'block';
         });
 }
@@ -133,6 +133,33 @@ window.removeAdmin = (key, email) => {
 const navLinks = document.querySelectorAll('.nav-link');
 const tabContents = document.querySelectorAll('.tab-content');
 
+// --- Mobile Sidebar Toggle ---
+const mobileToggle = document.getElementById('mobile-toggle');
+const mobileClose = document.getElementById('mobile-close');
+const sidebarOverlay = document.getElementById('sidebar-overlay');
+const sidebar = document.querySelector('.sidebar');
+
+if (mobileToggle) {
+    mobileToggle.addEventListener('click', () => {
+        sidebar.classList.add('active');
+        sidebarOverlay.classList.add('active');
+    });
+}
+
+if (mobileClose) {
+    mobileClose.addEventListener('click', () => {
+        sidebar.classList.remove('active');
+        sidebarOverlay.classList.remove('active');
+    });
+}
+
+if (sidebarOverlay) {
+    sidebarOverlay.addEventListener('click', () => {
+        sidebar.classList.remove('active');
+        sidebarOverlay.classList.remove('active');
+    });
+}
+
 navLinks.forEach(link => {
     link.addEventListener('click', (e) => {
         e.preventDefault();
@@ -149,8 +176,15 @@ navLinks.forEach(link => {
                 content.classList.add('active');
             }
         });
+
+        // Close sidebar on mobile
+        if (window.innerWidth <= 768) {
+            sidebar.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        }
     });
 });
+
 
 function renderClients(data) {
     if (!data) {
