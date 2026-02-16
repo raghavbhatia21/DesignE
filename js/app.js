@@ -45,6 +45,7 @@ auth.onAuthStateChanged(user => {
                 // Load Data
                 initDashboard();
                 initAdminManager();
+                initSettings();
             } else {
                 // Unauthorized
                 authError.innerText = "Access Denied. You are not an authorized admin (" + user.email + ").";
@@ -100,16 +101,16 @@ function renderAdminList(admins) {
     if (!listDiv) return;
 
     listDiv.innerHTML = `
-        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.8rem; background: rgba(255,255,255,0.03); border-radius: 10px; margin-bottom: 0.5rem; border: 1px solid rgba(255,255,255,0.05);">
-            <span>${ADMIN_WHITELIST_MASTER} <small style="color: var(--primary); margin-left: 0.5rem;">(Master)</small></span>
-            <i class="fas fa-shield-alt" style="color: var(--primary);"></i>
+        <div class="admin-item">
+            <span>${ADMIN_WHITELIST_MASTER} <span class="master-badge">Master</span></span>
+            <i class="fas fa-shield-alt"></i>
         </div>
     `;
 
     if (admins) {
         Object.entries(admins).forEach(([key, email]) => {
             const adminItem = document.createElement('div');
-            adminItem.style.cssText = "display: flex; align-items: center; justify-content: space-between; padding: 0.8rem; background: rgba(255,255,255,0.03); border-radius: 10px; margin-bottom: 0.5rem; border: 1px solid rgba(255,255,255,0.05);";
+            adminItem.className = 'admin-item';
             adminItem.innerHTML = `
                 <span>${email}</span>
                 <button class="action-btn delete" onclick="removeAdmin('${key}', '${email}')" style="width: 28px; height: 28px;">
@@ -318,3 +319,34 @@ window.deleteClient = (id) => {
         db.ref(`licenses/${id}`).remove();
     }
 };
+
+function initSettings() {
+    const settingsForm = document.getElementById('general-settings-form');
+    if (!settingsForm) return;
+
+    // Load current settings
+    db.ref('settings').on('value', snapshot => {
+        const settings = snapshot.val();
+        if (settings) {
+            if (document.getElementById('admin-email'))
+                document.getElementById('admin-email').value = settings.adminEmail || '';
+            if (document.getElementById('trial-period'))
+                document.getElementById('trial-period').value = settings.trialPeriod || 30;
+        }
+    });
+
+    settingsForm.onsubmit = (e) => {
+        e.preventDefault();
+        const settingsData = {
+            adminEmail: document.getElementById('admin-email').value,
+            trialPeriod: document.getElementById('trial-period').value
+        };
+
+        db.ref('settings').update(settingsData).then(() => {
+            alert("Settings updated successfully!");
+        }).catch(error => {
+            console.error("Settings Update Error:", error);
+            alert("Failed to update settings.");
+        });
+    };
+}

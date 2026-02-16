@@ -145,19 +145,22 @@
                 </header>
                 <div class="glass" style="padding: 2rem; margin-bottom: 2rem;">
                     <h3>General Settings</h3>
-                    <div class="form-group" style="margin-top: 1.5rem;">
-                        <label>Master Application Name</label>
-                        <input type="text" value="DesignE SaaS" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label>Admin Notification Email</label>
-                        <input type="email" value="raghavbhatia332@gmail.com">
-                    </div>
-                    <div class="form-group">
-                        <label>Default Trial Period (Days)</label>
-                        <input type="number" value="30">
-                    </div>
-                    <button class="save-btn" style="width: auto;">Update Settings</button>
+                    <form id="general-settings-form">
+                        <div class="form-group" style="margin-top: 1.5rem;">
+                            <label>Master Application Name</label>
+                            <input type="text" id="master-app-name" value="DesignE SaaS" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Admin Notification Email</label>
+                            <input type="email" id="admin-email" value="raghavbhatia332@gmail.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Default Trial Period (Days)</label>
+                            <input type="number" id="trial-period" value="30">
+                        </div>
+                        <button type="submit" class="save-btn" id="update-settings-btn" style="width: auto;">Update
+                            Settings</button>
+                    </form>
                 </div>
 
                 <div class="glass" style="padding: 2rem;">
@@ -166,16 +169,16 @@
                         Grant access to other Google accounts. Note: `raghavbhatia332@gmail.com` always has access.
                     </p>
 
-                    <div id="admin-list" style="margin-bottom: 1.5rem;">
+                    <div id="admin-list" class="admin-list">
                         <!-- Admins list loaded via JS -->
                     </div>
 
-                    <form id="add-admin-form" style="display: flex; gap: 1rem; align-items: flex-end;">
-                        <div class="form-group" style="margin-bottom: 0; flex-grow: 1;">
+                    <form id="add-admin-form" class="add-admin-form">
+                        <div class="form-group flex-group">
                             <label>New Admin Email</label>
                             <input type="email" id="new-admin-email" placeholder="e.g. colleague@gmail.com" required>
                         </div>
-                        <button type="submit" class="save-btn" style="width: auto; height: 42px;">Add Admin</button>
+                        <button type="submit" class="save-btn admin-add-btn">Add Admin</button>
                     </form>
                 </div>
             </section>
