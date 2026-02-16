@@ -347,3 +347,72 @@ td {
     cursor: pointer;
     font-weight: 600;
 }
+
+/* Tab Visibility */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Empty State Helper */
+.empty-state-guide {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 20px;
+    border: 2px dashed var(--glass-border);
+    margin: 2rem 0;
+}
+
+.empty-state-guide i {
+    font-size: 3rem;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+}
+
+.empty-state-guide h3 {
+    margin-bottom: 0.8rem;
+}
+
+.empty-state-guide p {
+    color: var(--text-muted);
+    max-width: 400px;
+    margin: 0 auto 2rem;
+    line-height: 1.6;
+}
+
+.guide-steps {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    text-align: left;
+    margin-bottom: 2rem;
+}
+
+.step {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.step-num {
+    background: var(--primary);
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+.step-text {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}

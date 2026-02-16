@@ -9,9 +9,53 @@ db.ref('licenses').on('value', snapshot => {
     updateStats(data);
 });
 
+// Tab Switching Logic
+const navLinks = document.querySelectorAll('.nav-link');
+const tabContents = document.querySelectorAll('.tab-content');
+
+navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetTab = link.dataset.tab;
+
+        // Update Nav
+        navLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+
+        // Update Views
+        tabContents.forEach(content => {
+            content.classList.remove('active');
+            if (content.id === `${targetTab}-view`) {
+                content.classList.add('active');
+            }
+        });
+    });
+});
+
 function renderClients(data) {
     if (!data) {
-        clientsList.innerHTML = '<tr><td colspan="6" style="text-align: center;">No clients yet.</td></tr>';
+        clientsList.innerHTML = `
+            <tr>
+                <td colspan="6">
+                    <div class="empty-state-guide">
+                        <i class="fas fa-magic"></i>
+                        <h3>Your Dashboard is Ready!</h3>
+                        <p>No client applications have connected yet. You can get started in two ways:</p>
+                        <div class="guide-steps">
+                            <div class="step">
+                                <div class="step-num">1</div>
+                                <div class="step-text">Open your <b>demo caferesto</b> app once to auto-register it.</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-num">2</div>
+                                <div class="step-text">Or click "Add New Client" to create a license manually.</div>
+                            </div>
+                        </div>
+                        <button class="add-client-btn" onclick="openAddModal()">Add Your First Client</button>
+                    </div>
+                </td>
+            </tr>
+        `;
         return;
     }
 

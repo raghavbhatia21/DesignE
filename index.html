@@ -14,9 +14,9 @@
     <div class="sidebar">
         <div class="logo">Design<span>E</span></div>
         <nav>
-            <a href="#" class="active"><i class="fas fa-users"></i> Clients</a>
-            <a href="#"><i class="fas fa-chart-line"></i> Analytics</a>
-            <a href="#"><i class="fas fa-cog"></i> Settings</a>
+            <a href="#" class="nav-link active" data-tab="clients"><i class="fas fa-users"></i> Clients</a>
+            <a href="#" class="nav-link" data-tab="analytics"><i class="fas fa-chart-line"></i> Analytics</a>
+            <a href="#" class="nav-link" data-tab="settings"><i class="fas fa-cog"></i> Settings</a>
         </nav>
         <div class="user-profile">
             <img src="https://ui-avatars.com/api/?name=Admin&background=FF4B2B&color=fff" alt="Admin">
@@ -28,55 +28,112 @@
     </div>
 
     <main class="content">
-        <header>
-            <h1>Client Subscriptions</h1>
-            <button class="add-client-btn" onclick="openAddModal()"><i class="fas fa-plus"></i> Add New Client</button>
-        </header>
+        <!-- Clients View -->
+        <section id="clients-view" class="tab-content active">
+            <header>
+                <h1>Client Subscriptions</h1>
+                <button class="add-client-btn" onclick="openAddModal()"><i class="fas fa-plus"></i> Add New
+                    Client</button>
+            </header>
 
-        <div class="stats-grid">
-            <div class="stat-card glass">
-                <div class="stat-icon" style="background: rgba(255, 75, 43, 0.1); color: #FF4B2B;"><i
-                        class="fas fa-store"></i></div>
-                <div class="stat-info">
-                    <span class="label">Total Clients</span>
-                    <span class="value" id="total-clients">0</span>
+            <div class="stats-grid">
+                <div class="stat-card glass">
+                    <div class="stat-icon" style="background: rgba(255, 75, 43, 0.1); color: #FF4B2B;"><i
+                            class="fas fa-store"></i></div>
+                    <div class="stat-info">
+                        <span class="label">Total Clients</span>
+                        <span class="value" id="total-clients">0</span>
+                    </div>
+                </div>
+                <div class="stat-card glass">
+                    <div class="stat-icon" style="background: rgba(37, 211, 102, 0.1); color: #25D366;"><i
+                            class="fas fa-check-circle"></i></div>
+                    <div class="stat-info">
+                        <span class="label">Active Services</span>
+                        <span class="value" id="active-services">0</span>
+                    </div>
+                </div>
+                <div class="stat-card glass">
+                    <div class="stat-icon" style="background: rgba(255, 215, 0, 0.1); color: #FFD700;"><i
+                            class="fas fa-exclamation-triangle"></i></div>
+                    <div class="stat-info">
+                        <span class="label">Expiring Soon</span>
+                        <span class="value" id="expiring-soon">0</span>
+                    </div>
                 </div>
             </div>
-            <div class="stat-card glass">
-                <div class="stat-icon" style="background: rgba(37, 211, 102, 0.1); color: #25D366;"><i
-                        class="fas fa-check-circle"></i></div>
-                <div class="stat-info">
-                    <span class="label">Active Services</span>
-                    <span class="value" id="active-services">0</span>
-                </div>
-            </div>
-            <div class="stat-card glass">
-                <div class="stat-icon" style="background: rgba(255, 215, 0, 0.1); color: #FFD700;"><i
-                        class="fas fa-exclamation-triangle"></i></div>
-                <div class="stat-info">
-                    <span class="label">Expiring Soon</span>
-                    <span class="value" id="expiring-soon">0</span>
-                </div>
-            </div>
-        </div>
 
-        <div class="table-container glass">
-            <table id="clients-table">
-                <thead>
-                    <tr>
-                        <th>Cafe Name</th>
-                        <th>License ID</th>
-                        <th>Subscription</th>
-                        <th>Days Left</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="clients-list">
-                    <!-- Loaded via JS -->
-                </tbody>
-            </table>
-        </div>
+            <div class="table-container glass">
+                <table id="clients-table">
+                    <thead>
+                        <tr>
+                            <th>Cafe Name</th>
+                            <th>License ID</th>
+                            <th>Subscription</th>
+                            <th>Days Left</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clients-list">
+                        <!-- Loaded via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Analytics View -->
+        <section id="analytics-view" class="tab-content">
+            <header>
+                <h1>Business Analytics</h1>
+            </header>
+            <div class="stats-grid">
+                <div class="stat-card glass">
+                    <div class="stat-icon" style="background: rgba(30, 144, 255, 0.1); color: #1e90ff;"><i
+                            class="fas fa-wallet"></i></div>
+                    <div class="stat-info">
+                        <span class="label">Total Revenue</span>
+                        <span class="value">₹36,000</span>
+                    </div>
+                </div>
+                <div class="stat-card glass">
+                    <div class="stat-icon" style="background: rgba(147, 112, 219, 0.1); color: #9370db;"><i
+                            class="fas fa-percentage"></i></div>
+                    <div class="stat-info">
+                        <span class="label">Renewal Rate</span>
+                        <span class="value">94%</span>
+                    </div>
+                </div>
+            </div>
+            <div class="glass" style="padding: 3rem; text-align: center;">
+                <i class="fas fa-chart-bar fa-3x" style="color: var(--primary); margin-bottom: 1rem;"></i>
+                <h3>Revenue Insights</h3>
+                <p style="color: var(--text-muted); margin-top: 0.5rem;">Connecting your Stripe/PayPal account will
+                    enable live revenue tracking here.</p>
+            </div>
+        </section>
+
+        <!-- Settings View -->
+        <section id="settings-view" class="tab-content">
+            <header>
+                <h1>System Settings</h1>
+            </header>
+            <div class="glass" style="padding: 2rem;">
+                <div class="form-group">
+                    <label>Master Application Name</label>
+                    <input type="text" value="DesignE SaaS" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Admin Notification Email</label>
+                    <input type="email" value="raghavbhatia332@gmail.com">
+                </div>
+                <div class="form-group">
+                    <label>Default Trial Period (Days)</label>
+                    <input type="number" value="30">
+                </div>
+                <button class="save-btn" style="width: auto;">Update Settings</button>
+            </div>
+        </section>
     </main>
 
     <!-- Add/Edit Modal -->
