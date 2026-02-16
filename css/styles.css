@@ -485,8 +485,7 @@ td {
 }
 
 /* Mobile Responsive Adjustments */
-.mobile-menu-btn,
-.mobile-close-btn {
+.mobile-menu-btn {
     display: none;
     background: rgba(255, 255, 255, 0.1);
     color: white;
@@ -497,6 +496,25 @@ td {
     cursor: pointer;
     font-size: 1.2rem;
     z-index: 1001;
+    align-items: center;
+    justify-content: center;
+}
+
+body.sidebar-open .mobile-menu-btn {
+    display: none !important;
+}
+
+.mobile-close-btn {
+    display: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    z-index: 1002;
     align-items: center;
     justify-content: center;
 }

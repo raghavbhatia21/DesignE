@@ -144,6 +144,7 @@ if (mobileToggle) {
     mobileToggle.addEventListener('click', () => {
         sidebar.classList.add('active');
         sidebarOverlay.classList.add('active');
+        document.body.classList.add('sidebar-open');
     });
 }
 
@@ -151,6 +152,7 @@ if (mobileClose) {
     mobileClose.addEventListener('click', () => {
         sidebar.classList.remove('active');
         sidebarOverlay.classList.remove('active');
+        document.body.classList.remove('sidebar-open');
     });
 }
 
@@ -158,6 +160,7 @@ if (sidebarOverlay) {
     sidebarOverlay.addEventListener('click', () => {
         sidebar.classList.remove('active');
         sidebarOverlay.classList.remove('active');
+        document.body.classList.remove('sidebar-open');
     });
 }
 
@@ -182,6 +185,7 @@ navLinks.forEach(link => {
         if (window.innerWidth <= 768) {
             sidebar.classList.remove('active');
             sidebarOverlay.classList.remove('active');
+            document.body.classList.remove('sidebar-open');
         }
     });
 });
