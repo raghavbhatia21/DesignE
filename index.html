@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DesignE | SaaS Master Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="logo">Design<span>E</span></div>
+        <nav>
+            <a href="#" class="active"><i class="fas fa-users"></i> Clients</a>
+            <a href="#"><i class="fas fa-chart-line"></i> Analytics</a>
+            <a href="#"><i class="fas fa-cog"></i> Settings</a>
+        </nav>
+        <div class="user-profile">
+            <img src="https://ui-avatars.com/api/?name=Admin&background=FF4B2B&color=fff" alt="Admin">
+            <div class="user-info">
+                <span class="name">Raghav Bhatia</span>
+                <span class="role">Master Admin</span>
+            </div>
+        </div>
+    </div>
+
+    <main class="content">
+        <header>
+            <h1>Client Subscriptions</h1>
+            <button class="add-client-btn" onclick="openAddModal()"><i class="fas fa-plus"></i> Add New Client</button>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card glass">
+                <div class="stat-icon" style="background: rgba(255, 75, 43, 0.1); color: #FF4B2B;"><i
+                        class="fas fa-store"></i></div>
+                <div class="stat-info">
+                    <span class="label">Total Clients</span>
+                    <span class="value" id="total-clients">0</span>
+                </div>
+            </div>
+            <div class="stat-card glass">
+                <div class="stat-icon" style="background: rgba(37, 211, 102, 0.1); color: #25D366;"><i
+                        class="fas fa-check-circle"></i></div>
+                <div class="stat-info">
+                    <span class="label">Active Services</span>
+                    <span class="value" id="active-services">0</span>
+                </div>
+            </div>
+            <div class="stat-card glass">
+                <div class="stat-icon" style="background: rgba(255, 215, 0, 0.1); color: #FFD700;"><i
+                        class="fas fa-exclamation-triangle"></i></div>
+                <div class="stat-info">
+                    <span class="label">Expiring Soon</span>
+                    <span class="value" id="expiring-soon">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-container glass">
+            <table id="clients-table">
+                <thead>
+                    <tr>
+                        <th>Cafe Name</th>
+                        <th>License ID</th>
+                        <th>Subscription</th>
+                        <th>Days Left</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clients-list">
+                    <!-- Loaded via JS -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Add/Edit Modal -->
+    <div id="client-modal" class="modal">
+        <div class="modal-content glass">
+            <h2 id="modal-title">Add New Client</h2>
+            <form id="client-form">
+                <input type="hidden" id="edit-id">
+                <div class="form-group">
+                    <label>Client Name</label>
+                    <input type="text" id="client-name" placeholder="e.g. Caferesto Demo" required>
+                </div>
+                <div class="form-group">
+                    <label>License ID (Unique)</label>
+                    <input type="text" id="license-id" placeholder="e.g. caferesto-001" required>
+                </div>
+                <div class="form-group">
+                    <label>Subscription Expiry</label>
+                    <input type="date" id="expiry-date" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="save-btn">Save Client</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
