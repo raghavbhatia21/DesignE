@@ -1,13 +1,133 @@
 const clientsList = document.getElementById('clients-list');
 const clientForm = document.getElementById('client-form');
 const clientModal = document.getElementById('client-modal');
+const loginOverlay = document.getElementById('login-overlay');
+const dashboardContent = document.getElementById('dashboard-content');
+const authError = document.getElementById('auth-error');
 
-// Initial Load
-db.ref('licenses').on('value', snapshot => {
-    const data = snapshot.val();
-    renderClients(data);
-    updateStats(data);
+const ADMIN_WHITELIST_MASTER = 'raghavbhatia332@gmail.com';
+let authorizedAdmins = [ADMIN_WHITELIST_MASTER];
+
+// --- Auth Logic ---
+function signInWithGoogle() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider)
+        .catch(error => {
+            console.error("Auth Error:", error);
+            authError.innerText = "Login failed: " + error.message;
+            authError.style.display = 'block';
+        });
+}
+
+function handleSignOut() {
+    auth.signOut().then(() => {
+        window.location.reload();
+    });
+}
+
+// Monitor Auth State
+auth.onAuthStateChanged(user => {
+    if (user) {
+        // Fetch current whitelist from DB before final check
+        db.ref('admins').once('value').then(snapshot => {
+            const dbAdmins = snapshot.val() ? Object.values(snapshot.val()) : [];
+            authorizedAdmins = [ADMIN_WHITELIST_MASTER, ...dbAdmins];
+
+            if (authorizedAdmins.includes(user.email)) {
+                // Authorized
+                loginOverlay.classList.remove('active');
+                dashboardContent.style.display = 'block';
+
+                // Update Admin Profile UI
+                document.getElementById('admin-name').innerText = user.displayName;
+                document.getElementById('admin-photo').src = user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName}&background=FF4B2B&color=fff`;
+
+                // Load Data
+                initDashboard();
+                initAdminManager();
+            } else {
+                // Unauthorized
+                authError.innerText = "Access Denied. You are not an authorized admin (" + user.email + ").";
+                authError.style.display = 'block';
+                auth.signOut();
+            }
+        });
+    } else {
+        // Not Signed In
+        loginOverlay.classList.add('active');
+        dashboardContent.style.display = 'none';
+    }
 });
+
+function initDashboard() {
+    // Initial Load - Realtime updates
+    db.ref('licenses').on('value', snapshot => {
+        const data = snapshot.val();
+        renderClients(data);
+        updateStats(data);
+    });
+}
+
+function initAdminManager() {
+    // Real-time update admin list in settings
+    db.ref('admins').on('value', snapshot => {
+        const admins = snapshot.val();
+        renderAdminList(admins);
+    });
+
+    const addAdminForm = document.getElementById('add-admin-form');
+    if (addAdminForm) {
+        addAdminForm.onsubmit = (e) => {
+            e.preventDefault();
+            const emailInput = document.getElementById('new-admin-email');
+            const email = emailInput.value.toLowerCase().trim();
+
+            if (email === ADMIN_WHITELIST_MASTER) {
+                alert("Master admin is already authorized.");
+                return;
+            }
+
+            // Push to Firebase
+            db.ref('admins').push(email).then(() => {
+                emailInput.value = '';
+            });
+        };
+    }
+}
+
+function renderAdminList(admins) {
+    const listDiv = document.getElementById('admin-list');
+    if (!listDiv) return;
+
+    listDiv.innerHTML = `
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.8rem; background: rgba(255,255,255,0.03); border-radius: 10px; margin-bottom: 0.5rem; border: 1px solid rgba(255,255,255,0.05);">
+            <span>${ADMIN_WHITELIST_MASTER} <small style="color: var(--primary); margin-left: 0.5rem;">(Master)</small></span>
+            <i class="fas fa-shield-alt" style="color: var(--primary);"></i>
+        </div>
+    `;
+
+    if (admins) {
+        Object.entries(admins).forEach(([key, email]) => {
+            const adminItem = document.createElement('div');
+            adminItem.style.cssText = "display: flex; align-items: center; justify-content: space-between; padding: 0.8rem; background: rgba(255,255,255,0.03); border-radius: 10px; margin-bottom: 0.5rem; border: 1px solid rgba(255,255,255,0.05);";
+            adminItem.innerHTML = `
+                <span>${email}</span>
+                <button class="action-btn delete" onclick="removeAdmin('${key}', '${email}')" style="width: 28px; height: 28px;">
+                    <i class="fas fa-trash-alt" style="font-size: 0.8rem;"></i>
+                </button>
+            `;
+            listDiv.appendChild(adminItem);
+        });
+    }
+}
+
+window.removeAdmin = (key, email) => {
+    if (confirm(`Remove access for ${email}?`)) {
+        db.ref(`admins/${key}`).remove();
+    }
+};
+
+// --- Dashboard Logic ---
 
 // Tab Switching Logic
 const navLinks = document.querySelectorAll('.nav-link');
