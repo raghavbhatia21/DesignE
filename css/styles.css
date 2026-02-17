@@ -425,13 +425,13 @@ td {
 .admin-item {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding: 0.8rem 1.2rem;
     background: rgba(255, 255, 255, 0.03);
     border-radius: 12px;
     margin-bottom: 0.8rem;
     border: 1px solid rgba(255, 255, 255, 0.05);
     transition: background 0.2s;
+    gap: 1.5rem;
 }
 
 .admin-item:hover {
@@ -439,13 +439,11 @@ td {
 }
 
 .admin-item span {
-    flex-grow: 1;
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.8rem;
     font-size: 0.9rem;
     min-width: 0;
-    word-break: break-all;
 }
 
 .master-badge {
@@ -540,6 +538,11 @@ body.sidebar-open .mobile-menu-btn {
         left: -100%;
         transition: left 0.3s ease;
         z-index: 999;
+        padding: 1.5rem 1rem;
+    }
+
+    .logo {
+        margin-bottom: 2rem;
     }
 
     .sidebar.active {
@@ -578,6 +581,24 @@ body.sidebar-open .mobile-menu-btn {
 
     .stats-grid {
         grid-template-columns: 1fr;
+    }
+
+    nav {
+        gap: 0.2rem;
+    }
+
+    nav a {
+        padding: 0.6rem 0.8rem;
+    }
+
+    .admin-item {
+        justify-content: space-between;
+        gap: 0.5rem;
+    }
+
+    .admin-item span {
+        flex-grow: 1;
+        word-break: break-all;
     }
 
     .table-container {

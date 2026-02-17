@@ -131,37 +131,14 @@ window.removeAdmin = (key, email) => {
 
 // --- Analytics Logic ---
 function initAnalytics() {
-    // Listen to sessions for active orders
-    db.ref('sessions').on('value', sessSnapshot => {
-        const sessions = sessSnapshot.val();
-        // Also need licenses for revenue calculation
-        db.ref('licenses').once('value').then(licSnapshot => {
-            const licenses = licSnapshot.val();
-            renderAnalytics(sessions, licenses);
-        });
-    });
-
-    // Also listen to licenses to update revenue when they change
+    // Only listen to licenses for business projections
     db.ref('licenses').on('value', licSnapshot => {
         const licenses = licSnapshot.val();
-        db.ref('sessions').once('value').then(sessSnapshot => {
-            const sessions = sessSnapshot.val();
-            renderAnalytics(sessions, licenses);
-        });
+        renderAnalytics(licenses);
     });
 }
 
-function renderAnalytics(sessions, licenses) {
-    let activeOrders = 0;
-
-    if (sessions) {
-        Object.values(sessions).forEach(session => {
-            if (session.status === 'active' || session.status === 'bill_requested') {
-                activeOrders++;
-            }
-        });
-    }
-
+function renderAnalytics(licenses) {
     // New Revenue Calculations
     let projectedYearly = 0;
     let overallBusinessRevenue = 0;
@@ -182,7 +159,6 @@ function renderAnalytics(sessions, licenses) {
     }
 
     // Update UI
-    animateValue('active-orders', activeOrders);
     animateValue('projected-revenue', projectedYearly, '₹');
     animateValue('overall-revenue', overallBusinessRevenue, '₹');
 }
