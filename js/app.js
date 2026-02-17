@@ -28,15 +28,19 @@ function handleSignOut() {
 // Monitor Auth State
 auth.onAuthStateChanged(user => {
     if (user) {
+        const userEmail = user.email.toLowerCase().trim();
+
         // Fetch current whitelist from DB before final check
         db.ref('admins').once('value').then(snapshot => {
             const dbAdmins = snapshot.val() ? Object.values(snapshot.val()) : [];
-            authorizedAdmins = [ADMIN_WHITELIST_MASTER, ...dbAdmins];
+            // Normalize all emails to lowercase for comparison
+            authorizedAdmins = [ADMIN_WHITELIST_MASTER.toLowerCase(), ...dbAdmins.map(e => e.toLowerCase().trim())];
 
-            if (authorizedAdmins.includes(user.email)) {
+            if (authorizedAdmins.includes(userEmail)) {
                 // Authorized
                 loginOverlay.classList.remove('active');
                 dashboardContent.style.display = 'block';
+                authError.style.display = 'none';
 
                 // Update Admin Profile UI
                 document.getElementById('admin-name').innerText = user.displayName;
@@ -48,8 +52,36 @@ auth.onAuthStateChanged(user => {
                 initSettings();
                 initAnalytics();
             } else {
-                // Unauthorized
-                authError.innerText = "Access Denied. You are not an authorized admin (" + user.email + ").";
+                // Unauthorized (Looked at DB, but not in list)
+                authError.innerText = `Access Denied. Your email (${user.email}) is not on the authorized list.`;
+                authError.style.display = 'block';
+                auth.signOut();
+            }
+        }).catch(error => {
+            console.error("Firebase DB Access Error:", error);
+
+            // If DB access fails (likely permissions), we STILL allow the Master Admin in
+            if (userEmail === ADMIN_WHITELIST_MASTER.toLowerCase()) {
+                loginOverlay.classList.remove('active');
+                dashboardContent.style.display = 'block';
+                authError.style.display = 'none';
+
+                // Fallback UI updates
+                document.getElementById('admin-name').innerText = user.displayName || 'Master Admin';
+
+                initDashboard();
+                initAdminManager();
+                initSettings();
+                initAnalytics();
+            } else {
+                // Not Master Admin and DB read failed (usually means unauthorized or rules issue)
+                authError.innerHTML = `
+                    <div style="text-align: left; padding: 10px;">
+                        <strong>Access Denied</strong><br>
+                        <small>Reason: Database lookup failed.</small><br>
+                        <small>If you are an authorized admin, please ensure you are signed in with the correct account (${user.email}).</small>
+                    </div>
+                `;
                 authError.style.display = 'block';
                 auth.signOut();
             }
