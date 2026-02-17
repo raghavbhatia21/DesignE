@@ -96,6 +96,7 @@
                                 <th>License ID</th>
                                 <th>Subscription</th>
                                 <th>Days Left</th>
+                                <th>Last Active</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -114,19 +115,27 @@
                 </header>
                 <div class="stats-grid">
                     <div class="stat-card glass">
-                        <div class="stat-icon" style="background: rgba(30, 144, 255, 0.1); color: #1e90ff;"><i
-                                class="fas fa-wallet"></i></div>
-                        <div class="stat-info">
-                            <span class="label">Total Revenue</span>
-                            <span class="value">₹36,000</span>
-                        </div>
-                    </div>
-                    <div class="stat-card glass">
                         <div class="stat-icon" style="background: rgba(147, 112, 219, 0.1); color: #9370db;"><i
                                 class="fas fa-percentage"></i></div>
                         <div class="stat-info">
-                            <span class="label">Renewal Rate</span>
-                            <span class="value">94%</span>
+                            <span class="label">Active Orders</span>
+                            <span class="value" id="active-orders">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass">
+                        <div class="stat-icon" style="background: rgba(30, 255, 144, 0.1); color: #1eff90;"><i
+                                class="fas fa-calendar-check"></i></div>
+                        <div class="stat-info">
+                            <span class="label">Projected Yearly Revenue</span>
+                            <span class="value" id="projected-revenue">₹0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass">
+                        <div class="stat-icon" style="background: rgba(255, 165, 0, 0.1); color: #ffa500;"><i
+                                class="fas fa-coins"></i></div>
+                        <div class="stat-info">
+                            <span class="label">Overall Business Revenue</span>
+                            <span class="value" id="overall-revenue">₹0</span>
                         </div>
                     </div>
                 </div>
@@ -202,6 +211,11 @@
                 <div class="form-group">
                     <label>Subscription Expiry</label>
                     <input type="date" id="expiry-date" required>
+                </div>
+                <div class="form-group" style="display: flex; align-items: center; gap: 0.8rem; margin-top: 1rem;">
+                    <input type="checkbox" id="exclude-revenue" style="width: auto; margin: 0;">
+                    <label for="exclude-revenue" style="margin-bottom: 0; cursor: pointer;">Exclude from Revenue
+                        calculations</label>
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
